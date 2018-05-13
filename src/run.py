@@ -22,7 +22,8 @@ formatter = logging.Formatter(
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser(description='tf-pose-estimation run')
     parser.add_argument('--image', type=str, default='./images/p1.jpg')
     parser.add_argument(
@@ -40,6 +41,10 @@ if __name__ == '__main__':
         type=str,
         default='[None]',
         help='for multiple scales, eg. [1.0, (1.1, 0.05)]')
+    parser.add_argument(
+        '--stick_only',
+        action='store_true',
+        help='save output with only stick poses')
     args = parser.parse_args()
     scales = ast.literal_eval(args.scales)
 
@@ -64,7 +69,13 @@ if __name__ == '__main__':
     fig = plt.figure()
     a = fig.add_subplot(2, 2, 1)
     a.set_title('Result')
-    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    if args.stick_only:
+        cv2.imwrite('output/test.png', image)
+        logger.info('image saved: {}'.format('output/test.png'))
+        import sys
+        sys.exit(0)
+    plt.imshow(rgb_image)
 
     bgimg = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2RGB)
     bgimg = cv2.resize(
@@ -128,3 +139,7 @@ if __name__ == '__main__':
     # plt.draw()
     # plt.show()
     # pass
+
+
+if __name__ == '__main__':
+    main()

@@ -24,7 +24,8 @@ formatter = logging.Formatter(
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser(
         description='tf-pose-estimation run by folder')
     parser.add_argument('--folder', type=str, default='./images/')
@@ -76,3 +77,7 @@ if __name__ == '__main__':
 
     with open(os.path.join(args.folder, 'pose.dil'), 'wb') as f:
         dill.dump(all_humans, f, protocol=dill.HIGHEST_PROTOCOL)
+
+
+if __name__ == '__main__':
+    main()
