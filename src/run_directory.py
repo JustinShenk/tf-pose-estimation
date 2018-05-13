@@ -8,6 +8,7 @@ import dill
 
 import common
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 from estimator import TfPoseEstimator
 from networks import get_graph_path, model_wh
@@ -68,7 +69,8 @@ def main():
 
         image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
         # cv2.imshow('tf-pose-estimation result', image)
-        output_filepath = os.path.join('output', 'pose_{}.png'.format(i))
+        filename = 'pose_{}.png'.format(i)
+        output_filepath = os.path.join('output', filename)
         cv2.imwrite(output_filepath, image)
         logger.info('image saved: {}'.format(output_filepath))
         # cv2.waitKey(5000)

@@ -44,7 +44,9 @@ def main():
     parser.add_argument(
         '--stick_only',
         action='store_true',
-        help='save output with only stick poses')
+        help='save output without other analysis')
+    parser.add_argument('--plot_3d', action='store_true', help='save 3d poses')
+
     args = parser.parse_args()
     scales = ast.literal_eval(args.scales)
 
@@ -108,37 +110,38 @@ def main():
         os.mkdir('output')
     plt.savefig('output/test.png')
     logger.info('image saved: {}'.format('output/test.png'))
-    # import sys
-    # sys.exit(0)
 
-    # For plotting in 3d
-    # logger.info('3d lifting initialization.')
-    # poseLifting = Prob3dPose('./src/lifting/models/prob_model_params.mat')
-    #
-    # image_h, image_w = image.shape[:2]
-    # standard_w = 640
-    # standard_h = 480
-    #
-    # pose_2d_mpiis = []
-    # visibilities = []
-    # for human in humans:
-    #     pose_2d_mpii, visibility = common.MPIIPart.from_coco(human)
-    #     pose_2d_mpiis.append([(int(x * standard_w + 0.5),
-    #                            int(y * standard_h + 0.5))
-    #                           for x, y in pose_2d_mpii])
-    #     visibilities.append(visibility)
-    #
-    # pose_2d_mpiis = np.array(pose_2d_mpiis)
-    # visibilities = np.array(visibilities)
-    # transformed_pose2d, weights = poseLifting.transform_joints(
-    #     pose_2d_mpiis, visibilities)
-    # pose_3d = poseLifting.compute_3d(transformed_pose2d, weights)
-    #
-    # for i, single_3d in enumerate(pose_3d):
-    #     plot_pose(single_3d)
-    # plt.draw()
-    # plt.show()
-    # pass
+    if not args.plot_3d:
+        import sys
+        sys.exit(0)
+    #For plotting in 3d
+    logger.info('3d lifting initialization.')
+    poseLifting = Prob3dPose('./src/lifting/models/prob_model_params.mat')
+
+    image_h, image_w = image.shape[:2]
+    standard_w = 640
+    standard_h = 480
+
+    pose_2d_mpiis = []
+    visibilities = []
+    for human in humans:
+        pose_2d_mpii, visibility = common.MPIIPart.from_coco(human)
+        pose_2d_mpiis.append([(int(x * standard_w + 0.5),
+                               int(y * standard_h + 0.5))
+                              for x, y in pose_2d_mpii])
+        visibilities.append(visibility)
+
+    pose_2d_mpiis = np.array(pose_2d_mpiis)
+    visibilities = np.array(visibilities)
+    transformed_pose2d, weights = poseLifting.transform_joints(
+        pose_2d_mpiis, visibilities)
+    pose_3d = poseLifting.compute_3d(transformed_pose2d, weights)
+
+    for i, single_3d in enumerate(pose_3d):
+        plot_pose(single_3d)
+    plt.draw()
+    plt.savefig('output/pose_3d_test.png')
+    logger.info('3d plot saved: {}'.format('output/pose_3d_test.png'))
 
 
 if __name__ == '__main__':
