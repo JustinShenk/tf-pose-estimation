@@ -6,3 +6,4 @@ requests
 fire
 dill
 git+https://github.com/ppwwyyxx/tensorpack.git
+tensorflow
