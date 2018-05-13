@@ -25,7 +25,7 @@ logger.addHandler(ch)
 
 def main():
     parser = argparse.ArgumentParser(description='tf-pose-estimation run')
-    parser.add_argument('--image', type=str, default='./images/p1.jpg')
+    parser.add_argument('--image', type=str, default='./images/p3.jpg')
     parser.add_argument(
         '--resolution',
         type=str,
