@@ -78,8 +78,8 @@ if __name__ == '__main__':
     # plt.imshow(CocoPose.get_bgimg(inp, target_size=(vectmap.shape[1], vectmap.shape[0])), alpha=0.5)
     plt.imshow(tmp2_even, cmap=plt.cm.gray, alpha=0.5)
     plt.colorbar()
-    plt.show()
-
+    plt.draw()
+    plt.savefig('test.png')
     import sys
     sys.exit(0)
 
@@ -94,16 +94,20 @@ if __name__ == '__main__':
     visibilities = []
     for human in humans:
         pose_2d_mpii, visibility = common.MPIIPart.from_coco(human)
-        pose_2d_mpiis.append([(int(x * standard_w + 0.5), int(y * standard_h + 0.5)) for x, y in pose_2d_mpii])
+        pose_2d_mpiis.append([(int(x * standard_w + 0.5),
+                               int(y * standard_h + 0.5))
+                              for x, y in pose_2d_mpii])
         visibilities.append(visibility)
 
     pose_2d_mpiis = np.array(pose_2d_mpiis)
     visibilities = np.array(visibilities)
-    transformed_pose2d, weights = poseLifting.transform_joints(pose_2d_mpiis, visibilities)
+    transformed_pose2d, weights = poseLifting.transform_joints(
+        pose_2d_mpiis, visibilities)
     pose_3d = poseLifting.compute_3d(transformed_pose2d, weights)
 
     for i, single_3d in enumerate(pose_3d):
         plot_pose(single_3d)
-    plt.show()
+    plt.draw()
+    plt.savefig('test1.png')
 
     pass
