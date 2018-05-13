@@ -41,6 +41,7 @@ if __name__ == '__main__':
     elapsed = time.time() - t
 
     logger.info('inference image: %s in %.4f seconds.' % (args.image, elapsed))
+    logger.info('image saved: {}'.format('test.png'))
 
     image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
     # cv2.imshow('tf-pose-estimation result', image)
